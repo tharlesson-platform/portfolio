@@ -1,53 +1,87 @@
-﻿# portfolio
+# Portfólio — Tharlesson Souza
 
-Portfólio pessoal em React + Vite, publicado com GitHub Pages.
+Portfólio técnico de **Tharlesson Souza**, construído para apresentar Site Reliability Engineering, Platform Engineering e arquitetura cloud por meio de decisões, arquitetura e efeito operacional.
+
+O conceito visual **Control Plane** transforma a página em uma interface de observação de uma plataforma viva. O visitante encontra cases reais, fluxos de engenharia, projetos open source e caminhos diretos para contato — sem formato de currículo e sem métricas inventadas.
+
+## Stack
+
+- React 19 + TypeScript
+- Vite 8
+- Three.js para a topologia procedural do hero
+- GSAP + ScrollTrigger para animações orientadas à leitura
+- CSS nativo com design tokens
+- Manrope Variable + IBM Plex Mono
+- GitHub Pages + GitHub Actions
 
 ## Desenvolvimento local
 
+Requisitos: Node.js 20.19 ou superior e npm.
+
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-## Build
+O Vite publicará a aplicação em `http://localhost:5173/portfolio/`.
+
+## Validação
 
 ```bash
+npm run check
 npm run build
+npm run preview
 ```
+
+O build executa a verificação estrita de TypeScript antes de gerar os assets.
+
+## Estrutura
+
+```text
+src/
+├── components/    Componentes de layout, contato e design system
+├── hooks/         Orquestração GSAP e comportamento de animação
+├── styles/        Tokens globais e estilos responsivos
+├── three/         Cena Three.js e fallback estático
+├── App.tsx        Composição das seções e interações
+├── content.ts     Cases e conteúdo estruturado
+└── main.tsx       Bootstrap, fontes e estilos globais
+docs/
+├── direcao-criativa.md
+├── sistema-de-animacoes.md
+├── design-system.md
+├── performance.md
+└── auditoria-final.md
+```
+
+## Performance e acessibilidade
+
+- Three.js e GSAP ficam fora do JavaScript crítico.
+- Mobile e `save-data` usam a topologia estática, sem baixar o runtime 3D.
+- A cena pausa fora da viewport e com a aba oculta.
+- `prefers-reduced-motion` remove movimento não essencial.
+- Navegação por teclado, skip link, dialog nativo, foco visível e estados de erro acessíveis.
+
+Auditoria Lighthouse local, perfil mobile simulado, em 29/07/2026:
+
+| Categoria | Score |
+|---|---:|
+| Performance | 99 |
+| Accessibility | 100 |
+| Best Practices | 100 |
+| SEO | 100 |
+
+Detalhes e budgets: [docs/performance.md](docs/performance.md).
 
 ## Deploy
 
-O deploy é automático via GitHub Actions quando houver push na branch `master`.
+O deploy ocorre via GitHub Actions em pushes para `master`, usando build reproduzível com `npm ci`.
+Após a publicação, o pipeline consulta a URL gerada com retry e valida a assinatura de conteúdo da página.
 
-URL esperada após merge:
+URL: <https://tharlesson.github.io/portfolio/>
 
-`https://tharlesson.github.io/portfolio/`
+Procedimento operacional: [docs/runbook-deploy-rollback.md](docs/runbook-deploy-rollback.md).
 
 ## Licença
 
-Este projeto está licenciado sob a Apache License 2.0. Consulte o arquivo `LICENSE` para mais detalhes.
-
-## Atribuição
-
-Este projeto foi desenvolvido e publicado por **Tharlesson**.
-Caso você utilize este material como base em ambientes internos, estudos, adaptações ou redistribuições, preserve os créditos de autoria e os avisos de licença aplicáveis.
-
-## Créditos e Uso
-
-Este repositório foi criado com foco em automação, padronização operacional e melhoria da rotina de profissionais de SRE, DevOps, Cloud e Plataforma.
-
-Você pode:
-- estudar
-- reutilizar
-- adaptar
-- evoluir este projeto dentro do seu contexto
-
-Ao reutilizar ou derivar este material:
-- mantenha os avisos de licença
-- preserve os créditos de autoria quando aplicável
-- documente alterações relevantes feitas sobre a base original
-
-## Autor
-
-**Tharlesson**  
-GitHub: https://github.com/tharlesson
+Apache License 2.0. Consulte [LICENSE](LICENSE) e [NOTICE](NOTICE).
