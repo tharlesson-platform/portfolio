@@ -9,9 +9,9 @@ Publicação estática em GitHub Pages por meio do workflow `Deploy Portfolio to
 - environment `github-pages` restrito à branch `master`;
 - checks `guardrails` e `build` aprovados;
 - `npm ci` e `npm run build` concluídos no pipeline;
-- URL esperada: `https://tharlesson.github.io/portfolio/`.
+- URL esperada: `https://tharlesson-platform.github.io/portfolio/`.
 
-> Estado verificado em 22/07/2026: `master` ainda não possui branch protection. Antes de permitir colaboração ou pushes de terceiros, habilite proteção com pull request obrigatório e os checks `guardrails` e `build` como required. Até lá, restrinja pushes diretos administrativamente.
+> Estado verificado em 29/07/2026: `master` possui branch protection com histórico linear, pull request obrigatório e o check `guardrails` como required. Force push e exclusão da branch estão bloqueados.
 
 ## Fluxo de deploy
 
