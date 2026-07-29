@@ -52,9 +52,9 @@
 
 ## Revisão SRE independente
 
-**APPROVED.** A segunda revisão confirmou build em pull requests, permissões mínimas por job, actions fixadas por SHA, smoke test pós-deploy e rollback documentado.
+**APPROVED.** A revisão confirmou build em pull requests com Node.js 24 LTS, permissões mínimas por job, actions fixadas por SHA, smoke test pós-deploy, branch protection com `guardrails` e `build` obrigatórios e rollback documentado.
 
 Riscos residuais baixos:
 
-- habilitar branch protection antes de colaboração de terceiros;
+- exigir aprovação humana caso o repositório passe a receber colaboração externa;
 - avaliar RUM de Core Web Vitals após a publicação.
