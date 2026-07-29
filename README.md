@@ -78,7 +78,7 @@ Detalhes e budgets: [docs/performance.md](docs/performance.md).
 O deploy ocorre via GitHub Actions em pushes para `master`, usando build reproduzível com `npm ci`.
 Após a publicação, o pipeline consulta a URL gerada com retry e valida a assinatura de conteúdo da página.
 
-URL: <https://tharlesson.github.io/portfolio/>
+URL: <https://tharlesson-platform.github.io/portfolio/>
 
 Procedimento operacional: [docs/runbook-deploy-rollback.md](docs/runbook-deploy-rollback.md).
 
