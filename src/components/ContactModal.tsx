@@ -22,7 +22,7 @@ export function ContactModal({ open, onClose }: { open: boolean; onClose: () => 
     setLoading(true);
     window.setTimeout(() => {
       const body = `${message.trim()}\n\nEnviado a partir do portfólio de Tharlesson Souza.`;
-      window.location.href = `mailto:tharlesson@msn.com?subject=${encodeURIComponent(subject.trim())}&body=${encodeURIComponent(body)}`;
+      window.location.href = `mailto:eu@tharlesson.com?subject=${encodeURIComponent(subject.trim())}&body=${encodeURIComponent(body)}`;
       setLoading(false);
       setSent(true);
     }, 350);
