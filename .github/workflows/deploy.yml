@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ${{ github.event_name == 'workflow_dispatch' && 'ubuntu-latest' || format('portfolio-run-{0}', github.run_id) }}
+    runs-on: ["portfolio-run-${{ github.run_id }}"]
     timeout-minutes: 20
     env:
       SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -33,7 +33,6 @@ jobs:
           persist-credentials: false
 
       - name: Verify exact source and isolated guest
-        if: github.event_name != 'workflow_dispatch'
         shell: bash
         run: |
           set -euo pipefail
@@ -81,7 +80,7 @@ jobs:
   deploy:
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master'
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ["portfolio-run-${{ github.run_id }}"]
     permissions:
       contents: read
       pages: write
