@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ${{ github.event_name == 'workflow_dispatch' && 'ubuntu-latest' || format('portfolio-run-{0}', github.run_id) }}
+    runs-on: ["portfolio-run-${{ github.run_id }}"]
     timeout-minutes: 20
     env:
       SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -33,7 +33,6 @@ jobs:
           persist-credentials: false
 
       - name: Verify exact source and isolated guest
-        if: github.event_name != 'workflow_dispatch'
         shell: bash
         run: |
           set -euo pipefail
@@ -44,6 +43,8 @@ jobs:
           test "$(uname -s)" = Linux
           test "$(uname -m)" = aarch64
           test -z "${SSH_AUTH_SOCK:-}"
+          test ! -w /var/run/docker.sock
+          if sudo -n true 2>/dev/null; then exit 1; fi
           test -z "${LOCAL_ARTIFACT_TOKEN:-}"
           test -z "${LOCAL_ARTIFACT_URL:-}"
           for credential in AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_WEB_IDENTITY_TOKEN_FILE AWS_CONTAINER_CREDENTIALS_FULL_URI AWS_CONTAINER_CREDENTIALS_RELATIVE_URI AWS_PROFILE AWS_DEFAULT_PROFILE; do
@@ -81,7 +82,7 @@ jobs:
   deploy:
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master'
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ["portfolio-run-${{ github.run_id }}"]
     permissions:
       contents: read
       pages: write
@@ -90,6 +91,20 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Verify isolated deployment guest
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f /opt/isolation-base-ready
+          test ! -L /opt/isolation-base-ready
+          test "$(uname -sm)" = 'Linux aarch64'
+          test -z "${SSH_AUTH_SOCK:-}"
+          test ! -w /var/run/docker.sock
+          if sudo -n true 2>/dev/null; then exit 1; fi
+          mount_inventory=$(findmnt --raw --noheadings --output FSTYPE)
+          test -n "$mount_inventory"
+          if grep -Ex '9p|virtiofs|nfs|nfs4|cifs|smbfs|fuse.sshfs' <<< "$mount_inventory"; then exit 1; fi
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5

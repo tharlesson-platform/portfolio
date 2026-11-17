@@ -15,11 +15,16 @@ Publicação estática em GitHub Pages por meio do workflow `Deploy Portfolio to
 
 ## Fluxo de deploy
 
-1. O push em `master` inicia o workflow.
-2. O job `build` instala pelo lockfile, valida TypeScript e gera `dist/`.
-3. O artifact é enviado ao GitHub Pages.
-4. O job `deploy` publica o artifact no environment `github-pages`.
-5. O smoke test consulta a URL retornada pelo deployment com retry, timeout e validação da assinatura `Tharlesson Souza`.
+1. Confirme o SHA em `master` e execute manualmente o workflow nessa branch.
+2. Confirme no GitHub o ID da execução, o SHA atual e o job `build` na fila.
+3. Provisione uma VM Linux ARM64 descartável com o label exclusivo
+   `portfolio-run-<id da execução>` e uma conta de job sem privilégios de administração.
+   O `build` instala pelo lockfile, valida TypeScript, gera `dist/` e envia o artefato ao GitHub.
+4. Confirme o `build` verde e o job `deploy` elegível na mesma execução. Provisione
+   uma segunda VM descartável com o mesmo label. O job verifica a VM e publica no
+   ambiente `github-pages`.
+5. Confirme o smoke na URL retornada pelo deploy. Ele usa retry, timeout e valida
+   a presença de `Tharlesson Souza` na página.
 
 O deploy só deve ser comunicado como concluído quando os jobs `build`, `deploy` e `Smoke test published page` estiverem verdes.
 
@@ -47,7 +52,8 @@ Não force-push e não reescreva `master`.
    ```
 
 5. Abra e aprove a mudança de rollback pelo fluxo normal do repositório.
-6. Faça merge em `master` e acompanhe o workflow até o smoke test.
+6. Faça merge em `master`, confirme o build e dispare a republicação manual.
+   Acompanhe a nova execução até o smoke test.
 7. Confirme a URL pública em desktop e mobile.
 
 ## Validação pós-rollback
