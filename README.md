@@ -101,11 +101,12 @@ local de artifacts. Node 24, `npm ci` e `npm run build` (TypeScript + Vite)
 continuam iguais, com timeout de 20 minutos. A configuração Code Quality existente
 não é alterada nem ativada pela migração.
 
-**Pages permanece manual:** dispatch em `master` mantém a rota hosted para o
-build; os passos Setup Pages/Upload artifact e todo o job `deploy`, incluindo
-condição, environment, permissões e smoke, são byte-idênticos à base revisada.
-Push/PR nunca executam esses passos. Nenhum gateway de artifacts do host é usado.
-Não foi executado dispatch, upload, deploy ou smoke remoto nesta preparação.
+**Publicação manual no Pages.** O dispatch em `master` usa uma VM local
+descartável para o build e outra para a publicação. Os dois jobs usam o label
+da mesma execução. O artefato segue pelo GitHub Actions até o job de deploy,
+que mantém o ambiente `github-pages`, as permissões de publicação e o smoke.
+Push e PR executam o build de validação. As etapas de publicação exigem o
+dispatch manual em `master`. Consulte o [runbook](docs/runbook-deploy-rollback.md).
 
 As provas nativas usam Node 24 oficial verificado por SHA256, cópia descartável
 e cache npm próprio. Build local não comprova execução da CI em VM nem publicação
